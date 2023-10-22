@@ -1,9 +1,11 @@
 require('dotenv').config();
 
-const {Client, Events, GatewayIntentBits, EmbedBuilder, AttachmentBuilder, PermissionsBitField, Permissions, SlashCommandBuilder, Embed} = require('discord.js');
+const {Client, Events, GatewayIntentBits, EmbedBuilder, AttachmentBuilder, 
+        PermissionsBitField, Permissions, SlashCommandBuilder, Embed} = require('discord.js');
 const ms = require('ms');
 //const OpenAIApi = require('openai');
 
+// necessary for Discord API
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -34,6 +36,7 @@ var response_msg = [
   "Don't get mad at your teammates"
 ]
 
+// Assigns the images and gifs their responses
 for (let imgs = 0; imgs < 9; imgs++) {
   files.push(new AttachmentBuilder('./cat_pics/image' + imgs + '.jpeg')) 
   files_embed.push(new EmbedBuilder().setTitle(response_msg[imgs]).setImage('attachment://image' + imgs + '.jpeg')) 
@@ -43,11 +46,14 @@ for (let gifs = 0; gifs < 3; gifs++) {
   files.push(new AttachmentBuilder('./cat_pics/gif' + gifs + '.gif'))
   files_embed.push(new EmbedBuilder().setTitle(response_msg[gifs + 9]).setImage('attachment://gif' + gifs + '.gif'))
 }
-/*
+/* 
+  potential chatbot
 const openai = new OpenAIApi({
   apiKey: process.env.API_KEY
-}) */
+}) 
+*/
 
+// All the commands
 client.on(Events.ClientReady,(x) => {
   console.log(`${x.user.tag} is ready!`)
 
@@ -63,6 +69,7 @@ client.on(Events.ClientReady,(x) => {
   .setName('origin')
   .setDescription('Find out the origins of this bot!')
 
+  //timer that allows for the user to input options
   const timer = new SlashCommandBuilder()
   .setName('timer')
   .setDescription('Set reminders with a timer')
@@ -94,6 +101,7 @@ client.on(Events.ClientReady,(x) => {
   //client.application.commands.create(chatbot);
 })
 
+// command actions
 client.on('interactionCreate', (interaction) => {
   if (!interaction.isChatInputCommand()) return;
   console.log(interaction.command)
@@ -124,7 +132,10 @@ client.on('interactionCreate', (interaction) => {
       
       
   } 
-    /* else if (interaction.commandName === 'chat') { 
+    /* 
+    potential chatbot 
+
+    else if (interaction.commandName === 'chat') { 
     const response = await openai.chat.completions
       .create({
         model: 'gpt-3.5-turbo',
@@ -140,10 +151,11 @@ client.on('interactionCreate', (interaction) => {
         ]
     })
    interaction.reply(response.choices[0].interaction.content)
-  } */
+  } 
+  */
 });
 
-
+// for timer command
 function notify(interaction, message) {
   interaction.followUp(message + ', now!');
 } 
